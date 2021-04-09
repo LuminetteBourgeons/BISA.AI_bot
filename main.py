@@ -37,8 +37,12 @@ bot.remove_command('help')
 
 @bot.command()
 async def help(ctx):
-    embed=discord.Embed(title="BISA AI bot's commands:", description="prefix: `Ai, `, `ai, `", colour=discord.Color.blurple())
+    embed=discord.Embed(title="BISA AI bot's commands:", description="prefix: `Ai, `, `ai, `\nDevelop by Aisha `Luminette#0666`\n<https://github.com/LuminetteBourgeons/BISA.AI_bot/tree/main>", colour=discord.Color.blurple())
     embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.add_field(name="__Bot owner only__", value="***Auto Presence Changing:***\npstart/pstop\n", inline=True)
+    embed.add_field(name="__Admins__", value="***Presence Changing:***\nsetonline\nsetidle\nsetdnd\nsetinv\nactplaying\nactlistening\nactwatching\nactcompeting\n***Making Embed:***\nembedevent `(terikat dengan channel #bisa-ai-event)`\nembed\n***Say:***\nsay\n***Dm:***\ndm\n***Warn:***\nwarn", inline=True)
+    embed.add_field(name="__General__", value="***Shows User's Avatar:***\navatar\n***Shows User's Information:***\nuserinfo\n***Shows Server's Icon***\nservericon\n***ShowsServer's Information:***\nserverinfo\n***Reminder:***\nreminder", inline=True)
+    embed.add_field(name='__Warning!__', value="General can't use Admins and Bot Owner's commands!\nAdmins can't use Bot Owner's commands!", inline=False)
     await ctx.send(embed=embed)
 
 @bot.event
@@ -59,19 +63,30 @@ async def presence_change_before():
     await bot.wait_until_ready()
 
 @bot.command()
+async def embedevent(ctx):
+    def check(message):
+        return message.author == ctx.author and message.channel == ctx.channel
+    await ctx.send('Enter a title')
+    title = await bot.wait_for('message', check=check)
+    await ctx.send('Enter a description')
+    desc = await bot.wait_for('message', check=check)
+    embed = discord.Embed(title=title.content, description=desc.content, color=discord.Colour.blurple())
+    message_channel = bot.get_channel(829879666881200149)
+    print(f"Got channel {message_channel}")
+    await message_channel.send(embed=embed)
+    await ctx.send(embed=embed)
+    
+@bot.command()
+@commands.has_permissions(administrator=True)
 async def embed(ctx):
     def check(message):
         return message.author == ctx.author and message.channel == ctx.channel
     await ctx.send('Enter a title')
     title = await bot.wait_for('message', check=check)
-  
     await ctx.send('Enter a description')
     desc = await bot.wait_for('message', check=check)
 
     embed = discord.Embed(title=title.content, description=desc.content, color=discord.Colour.blurple())
-    message_channel = bot.get_channel(829879666881200149)
-    print(f"Got channel {message_channel}")
-    await message_channel.send(embed=embed)
     await ctx.send(embed=embed)
 
 @bot.command()
